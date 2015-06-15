@@ -28,8 +28,8 @@ set browsedir=/Users/th/Desktop "初期保存ディレクトリ指定
 " NeoBundle 'itchyny/lightline.vim'
 " call neobundle#end()
 " filetype plugin indent on
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-call singleton#enable()			""""" タブで開く
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+client server -> nexus7
+"call singleton#enable()			""""" タブで開く
 "#################### END N7 コメントアウト ##################################
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ".vimrcに設定を沢山入れていると段々とVimの起動は遅くなります。
