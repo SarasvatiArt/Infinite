@@ -1,1 +1,0 @@
-/Users/th/.vim/colors/PurpleTERM.vim
