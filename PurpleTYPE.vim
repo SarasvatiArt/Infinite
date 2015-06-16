@@ -1,4 +1,4 @@
-" Vim color file - PurpleTYPE
+" PurpleTYPE
 set background=dark
 if version > 580
 	hi clear
@@ -6,10 +6,8 @@ if version > 580
 		syntax reset
 	endif
 endif
-
 set t_Co=256
 let g:colors_name = "PurpleTYPE"
-
 "hi CTagsMember -- no settings --
 "hi CTagsGlobalConstant -- no settings --
 hi Normal guifg=#fdfcff guibg=#110026 guisp=#110026 gui=NONE ctermfg=15 ctermbg=17 cterm=NONE
@@ -53,11 +51,10 @@ hi SpellRare guifg=#F9F9FF guibg=#192224 guisp=#192224 gui=underline ctermfg=189
 hi Comment guifg=#ffffff guibg=NONE guisp=NONE gui=NONE ctermfg=15 ctermbg=NONE cterm=NONE
 hi Character guifg=#ffcf70 guibg=NONE guisp=NONE gui=NONE ctermfg=221 ctermbg=NONE cterm=NONE
 hi TabLineSel guifg=#ffffff guibg=#e3ccff guisp=#e3ccff gui=bold ctermfg=15 ctermbg=189 cterm=bold
-hi Number guifg=#00f2ff guibg=NONE guisp=NONE gui=NONE ctermfg=14 ctermbg=NONE cterm=NONE
+hi Number guifg=#99fffa guibg=NONE guisp=NONE gui=NONE ctermfg=14 ctermbg=NONE cterm=NONE
 hi Boolean guifg=#54ffaf guibg=NONE guisp=NONE gui=NONE ctermfg=85 ctermbg=NONE cterm=NONE
 hi Operator guifg=#fae350 guibg=NONE guisp=NONE gui=bold ctermfg=221 ctermbg=NONE cterm=bold
-hi CursorLine guifg=NONE guibg=#1e0052 guisp=#1e0052 gui=bold ctermfg=NONE ctermbg=17 cterm=bold
-"""""CursorLine
+hi CursorLine guifg=NONE guibg=NONE guisp=#ffffff gui=underline ctermfg=NONE ctermbg=NONE cterm=underline
 hi Union guifg=#4cc3ff guibg=#6b61b0 guisp=#6b61b0 gui=NONE ctermfg=81 ctermbg=61 cterm=NONE
 hi TabLineFill guifg=#b8ffff guibg=#3e0273 guisp=#3e0273 gui=bold ctermfg=159 ctermbg=54 cterm=bold
 hi Question guifg=#ffffff guibg=#0d15ff guisp=#0d15ff gui=NONE ctermfg=15 ctermbg=21 cterm=NONE
@@ -69,21 +66,20 @@ hi CursorColumn guifg=NONE guibg=#210073 guisp=#210073 gui=NONE ctermfg=NONE cte
 hi Define guifg=#ffabc1 guibg=NONE guisp=NONE gui=NONE ctermfg=218 ctermbg=NONE cterm=NONE
 hi Function guifg=#a9ff9e guibg=NONE guisp=NONE gui=bold ctermfg=157 ctermbg=NONE cterm=bold
 hi FoldColumn guifg=#192224 guibg=#A1A6A8 guisp=#A1A6A8 gui=italic ctermfg=235 ctermbg=248 cterm=NONE
-hi PreProc guifg=#99ffca guibg=NONE guisp=NONE gui=NONE ctermfg=121 ctermbg=NONE cterm=NONE
+hi PreProc guifg=#82cdff guibg=NONE guisp=NONE gui=NONE ctermfg=121 ctermbg=NONE cterm=NONE
 hi Visual guifg=#adfaff guibg=#0000b8 guisp=#0000b8 gui=NONE ctermfg=159 ctermbg=4 cterm=NONE
 hi MoreMsg guifg=#0affc6 guibg=NONE guisp=NONE gui=bold ctermfg=50 ctermbg=NONE cterm=bold
 hi SpellCap guifg=#F9F9FF guibg=#192224 guisp=#192224 gui=underline ctermfg=189 ctermbg=235 cterm=underline
 hi VertSplit guifg=#f0a3ff guibg=#50818f guisp=#50818f gui=bold ctermfg=219 ctermbg=66 cterm=bold
 hi Exception guifg=#ffd8a6 guibg=NONE guisp=NONE gui=bold ctermfg=223 ctermbg=NONE cterm=bold
 hi Keyword guifg=#eaff5e guibg=NONE guisp=NONE gui=bold ctermfg=191 ctermbg=NONE cterm=bold
-hi Type guifg=#ad99ff guibg=NONE guisp=NONE gui=bold ctermfg=141 ctermbg=NONE cterm=bold
+hi Type guifg=#ce99ff guibg=NONE guisp=NONE gui=NONE ctermfg=141 ctermbg=NONE cterm=bold
 hi DiffChange guifg=#00ffee guibg=#2e0059 guisp=#2e0059 gui=NONE ctermfg=14 ctermbg=53 cterm=NONE
-hi Cursor guifg=#5E5D00 guibg=#FFFFFF guisp=#FFADFA gui=bold ctermfg=0 ctermbg=255 cterm=bold
-"""""Cursor
+hi Cursor guifg=#00aab3 guibg=#c7f4ff guisp=#c7f4ff gui=NONE ctermfg=37 ctermbg=195 cterm=NONE
 hi SpellLocal guifg=#F9F9FF guibg=#192224 guisp=#192224 gui=underline ctermfg=189 ctermbg=235 cterm=underline
 hi Error guifg=#ffd49c guibg=#4c008f guisp=#4c008f gui=NONE ctermfg=223 ctermbg=54 cterm=NONE
 hi PMenu guifg=#8f8ae6 guibg=#072a5e guisp=#072a5e gui=NONE ctermfg=104 ctermbg=17 cterm=NONE
-hi SpecialKey guifg=#261f78 guibg=#110026 guisp=#110026 gui=bold ctermfg=18 ctermbg=18 cterm=bold
+hi SpecialKey guifg=#313194 guibg=NONE guisp=NONE gui=NONE ctermfg=18 ctermbg=NONE cterm=NONE
 hi Constant guifg=#c096ff guibg=NONE guisp=NONE gui=NONE ctermfg=141 ctermbg=NONE cterm=NONE
 hi DefinedName guifg=#af38ff guibg=NONE guisp=NONE gui=NONE ctermfg=13 ctermbg=NONE cterm=NONE
 hi Tag guifg=#82ffec guibg=NONE guisp=NONE gui=NONE ctermfg=123 ctermbg=NONE cterm=NONE
@@ -99,6 +95,10 @@ hi Macro guifg=#19fff0 guibg=NONE guisp=NONE gui=NONE ctermfg=14 ctermbg=NONE ct
 hi Underlined guifg=#F9F9FF guibg=#192224 guisp=#192224 gui=underline ctermfg=189 ctermbg=235 cterm=underline
 hi DiffAdd guifg=#f3e0ff guibg=#2a00a6 guisp=#2a00a6 gui=NONE ctermfg=225 ctermbg=19 cterm=NONE
 hi TabLine guifg=#ddddfc guibg=#9093db guisp=#9093db gui=bold ctermfg=189 ctermbg=104 cterm=bold
-hi cursorim guifg=#192224 guibg=#536991 guisp=#536991 gui=NONE ctermfg=235 ctermbg=60 cterm=NONE	
-"""""cursorim
+hi cursorim guifg=#192224 guibg=#536991 guisp=#536991 gui=NONE ctermfg=235 ctermbg=60 cterm=NONE
 hi cursorlinenr guifg=#ffdd00 guibg=NONE guisp=NONE gui=bold ctermfg=220 ctermbg=NONE cterm=bold
+hi vimHiGroup  guifg=#ffe969 guibg=NONE guisp=NONE gui=bold ctermfg=220 ctermbg=NONE cterm=bold
+" vimHiグループ
+hi vimGroup guifg=#ffa73b guibg=NONE guisp=NONE gui=bold ctermfg=220 ctermbg=NONE cterm=bold
+" vimグループ
+

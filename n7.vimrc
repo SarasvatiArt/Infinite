@@ -2,16 +2,16 @@
 set nocompatible	 """"" Vi-Improvedモード多分お約束
 set noswapfile		 """"" スワップファイル作らない
 set nobackup		 """"" バックアップファイル作らない
-set undodir=/Users/th/.vim/undo
-colorscheme PurpleTYPE 
-""""" /Users/th/.vim/colors/#####TYPE.vim
+"set undodir=/Users/th/.vim/undo
+colorscheme PurpleTerm
+" /Users/th/.vim/colors/#####TYPE.vim
 syntax on            """"" シンタックスオン
 """""set transparency=51 """"" 透明度0〜100"
 """"""""""""gvimのファイル保存ダイアログの初期ディレクトリ"""""""""""""""""""""""
-":set browsedir=buffer  "カレントディレクトリが初期ディレクトリになります。
-" set browsedir=/path/to/default/directory "PATHを直接指定
-set browsedir=/Users/th/Desktop "初期保存ディレクトリ指定
-":set browsedir=last "最後に保存したディレクトリを指定
+" 	set browsedir=buffer  "カレントディレクトリが初期ディレクトリになります。
+" 	set browsedir=/path/to/default/directory "PATHを直接指定
+" set browsedir=/Users/th/Desktop "初期保存ディレクトリ指定
+" 	set browsedir=last "最後に保存したディレクトリを指定
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 "#################### N7 コメントアウト#######################################
 " ● NEOBUNDLE ●  
@@ -288,3 +288,214 @@ filetype on
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "###########################################################################
+""""""""""""""""""""""""""""""
+" Android Terminal Emulator改変版用スクリプト
+""""""""""""""""""""""""""""""
+scriptencoding utf-8
+" set nocompatible
+
+" OSチェック
+if !executable("getprop") || system("getprop net.bt.name") !~ 'Android'
+  finish
+endif
+
+" バージョン判定
+ if system("getprop ro.build.version.release") > 4
+ endif
+" 機種判定
+ if system("getprop ro.product.model") =~ 'Nexus 7'
+ endif
+ if system("getprop persist.sys.language") =~ '^ja\n'
+"   " 日本語環境
+   set fencs=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,utf-16le,utf-16,default,latin1
+   let $LANG='ja_JP.UTF-8'
+ endif
+
+""""""""""""""""""""""""""""""
+" マウスを有効にする
+ set mouse=a
+
+" 終了時に端末表示色を再設定 (端末エミュレータのバグ対策)
+ au VimLeave * let saved_t_Co=&t_Co|let &t_Co=1|let &t_Co=saved_t_Co
+
+""""""""""""""""""""""""""""""
+" androidインテント
+" 現バッファのファイルをandroidアプリへのインテントで開く
+" (インテントの受け先を自動選択にするとうまく動作しない場合があります)
+ nnoremap <silent> <F7> :AndroidIntent<CR>
+ nnoremap <silent> <F8> :AndroidIntent!<CR>
+command! -nargs=* -bang AndroidIntent :call AndroidIntent(<bang>0, <q-args>)
+function! AndroidIntent(mode, file)
+  let file = a:file == '' ? expand('%:p') : fnamemodify(a:file, ':p')
+  let action = a:mode == 0 ? 'VIEW' : 'EDIT'
+  let file = escape(file, " '`$")
+  let cmd = printf('am start --user 0 -a android.intent.action.%s -t text/plain -d %s', action, file)
+  redraw|echo 'sharing file...'
+  let ret = system(cmd)
+endfunction
+
+"-----------------------------
+" 以降はATE改変版でのみ有効
+"-----------------------------
+if !exists("$APPFILES") || !filereadable($APPFILES."/vimrc")
+  finish
+endif
+
+""""""""""""""""""""""""""""""
+" copy/paste
+nnoremap <silent> "*dd dd:ATEMod copy<CR>
+vnoremap <silent> "*d   d:ATEMod copy<CR>
+nnoremap <silent> "*yy yy:ATEMod copy<CR>
+vnoremap <silent> "*y   y:ATEMod copy<CR>
+nnoremap <silent> "*p    :ATEMod paste<CR>
+vnoremap <silent> "*p   d:ATEMod Paste<CR>
+let s:clipboard = '~/.clipboard'
+let s:atep = 'p'
+let s:count = 1
+command! -nargs=* -count ATEMod :call ATEMod(<q-args>)
+function! ATEMod(cmd)
+  let lazyredraw = &lazyredraw
+  set lazyredraw
+  if (a:cmd =~ '^[0-9]\+$')
+    let cmd = printf('echo -n -e "\0033[%st"', a:cmd)
+    exe 'silent !'.cmd
+  elseif (a:cmd == "copy")
+    let str = @"
+    let str = iconv(str, &enc, "UTF-8")
+    redraw|echo 'copy text to clipboard'
+    call writefile(split(str, "\n"), fnamemodify(s:clipboard, ':p'), 'b')
+    call ATEMod(3)
+  elseif (a:cmd == 'cb2file')
+    call ATEMod(33)
+  elseif (a:cmd ==# 'paste')
+    let s:atep = 'p'
+    let s:count = v:count > 0 ? v:count : 1
+    call ATEMod(333)
+  elseif (a:cmd ==# 'Paste')
+    let s:atep = 'P'
+    let s:count = v:count > 0 ? v:count : 1
+    call ATEMod(333)
+  elseif (a:cmd == '_paste')
+    let list = readfile(fnamemodify(s:clipboard, ':p'))
+    let str = join(list, "\n")
+    let str = iconv(str, "UTF-8", &enc)
+    let @" = str
+    redraw | echo ''
+    let cmd = s:count > 1 ? s:count : ''
+    call feedkeys(cmd.s:atep, 't')
+    let s:count = 1
+  endif
+  let &lazyredraw = lazyredraw
+endfunction
+
+""""""""""""""""""""""""""""""
+" ノーマルモード移行で英数確定入力(ソフトキーボード)
+
+" エスケープシーケンス
+" |    | 効果           | 想定使用状況                | 備考
+" | 50 | デフォルト     |                             |
+" | 51 | 英数確定入力   | IMEが英数確定入力でない場合 | *日本語入力不可
+" | 52 | 英数入力に設定 | IMEが英数確定入力の場合     |
+" | 53 | 英数確定入力   | Google日本語入力の場合      | *Vimノーマルモード専用
+" ※Google日本語入力の英数確定入力は実験的なものです
+"
+" 実際の効果は
+" echo -n -e "\0033[51t"
+" のようにshellから実行して確認してみてください。
+" Vimからは :ATEMod 51 で実行可能です。
+" ただし「設定」のインプットメソッドが「単語ベース」でないと効果はありません。
+"
+" | 5  | 自動設定(ノーマルモード) | *ATOK=52, その他=51
+" | 55 | 自動設定(挿入モード)     | *Wnn系=52, その他=50
+
+" 以下のコメントのaugroupまでを有効化すると自動英数確定入力になります
+" ATOKとWnn Keyboard Labでは自動設定で特に問題ないようですが、環境に応じてスク
+" リプト設定を適切に変更してみてください。
+"
+" " ノーマルモード移行で英数入力(ソフトキーボード)
+" " ノーマルモード
+ let s:ImeNormal = 5
+" " 挿入モード
+ let s:ImeInsert = 55
+" " Vim終了後
+ let s:ImeVimLeave = 50
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+ augroup AndroidIME
+   au!
+   au VimEnter    * call ATEMod(s:ImeNormal)
+   au InsertEnter * call ATEMod(s:ImeInsert)
+   au InsertLeave * call ATEMod(s:ImeNormal)
+   au CmdWinEnter * call ATEMod(s:ImeInsert)
+   au CmdWinLeave * call ATEMod(s:ImeNormal)
+   au VimLeavePre * call ATEMod(s:ImeVimLeave)
+ augroup END
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" 以下の「デフォルト/英数確定入力トグル」までを有効にすると、キーマップから設
+" 定値を変更可能になります。
+" Wnn Keyboard labで主に日本語を入力したい場合は、サンプルではgzにマップしてい
+" る「Wnn日本語入力優先切替(挿入モード)」で切り替えると良いでしょう。
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" " デフォルト/英数確定入力トグル
+ nnoremap <silent> gx :call <SID>setInputType('Toggle')<CR>
+" " Wnn日本語入力優先切替(挿入モード)
+ nnoremap <silent> gz :call <SID>setInputType('WnnToggle')<CR>
+"
+ let s:ImeNormalToggle = s:ImeNormal != 50 ? s:ImeNormal : 5
+ let s:ImeInsertToggle = s:ImeInsert != 50 ? s:ImeInsert : 55
+ function! s:setInputType(mode)
+   if a:mode == 'Auto'
+     let s:ImeNormal = 5
+     call ATEMod(s:ImeNormal)
+     redraw|echo 'ImeAuto'
+   elseif a:mode == 'Toggle'
+     if s:ImeNormal != 50
+         let s:ImeNormalToggle = s:ImeNormal
+     endif
+     let s:ImeNormal = s:ImeNormal == s:ImeNormalToggle ? 50 : s:ImeNormalToggle
+     call ATEMod(s:ImeNormal)
+     redraw|echo s:ImeNormal == 50 ? 'ImeNormal' : 'ImeForceEn'
+   elseif a:mode == 'WnnToggle'
+     let s:ImeInsert = s:ImeInsert == s:ImeInsertToggle ? 50 : s:ImeInsertToggle
+     redraw|echo s:ImeInsert == 50 ? 'ImeInsertWnnJp' : 'ImeInsertWnnForceEn'
+   endif
+ endfunction
+
+" (注意)
+" Google日本語入力用の53では、英数確定入力化処理の関係で以下の制限があります。
+" ・ノーマルモードではEnter,BS等2回押さないと有効にならないキーがあります。
+" ・ノーマルモードで数値/記号などに切り替えると最後に入力したキーが再び入力さ
+" れることがあります。
+" 対処として以下の方法があります。
+"
+" Android 5.0以降
+" スクリプトは使用せずに、Googleキーボード(英語)を確定入力に設定して、言語切替
+" ボタン(地球マーク)で日本語IMEとGoogleキーボード(英語)とを適宜切替えするなど
+" してみてください。(スクリプトは併用可能です)
+"
+" Android 4.x以前
+" 「デフォルト/英数確定入力トグル」かメニューのIMEリセットで通常入力とトグル切
+" 替可能なので、状況に応じて変更しながら使用してみてください。
+" IMEリセットはアクションバーボタンにも設定可能です。
+
+""""""""""""""""""""""""""""""
+" ノーマルモード移行で英数入力(ハードウェアキーボード)
+" im_control.vim
+" https://github.com/fuenor/im_control.vim
+
+let g:IM_CtrlMode = 1
+let g:IM_vi_CooperativeMode  = 1
+let g:IM_JpFixModeAutoToggle = 0
+" inoremap <silent> <C-j> <C-r>=IMState('Toggle')<CR>
+
+function! IMCtrl(cmd)
+  let cmd = a:cmd
+  if cmd == 'On'
+    call ATEMod(1)
+  elseif cmd == 'Off'
+    call ATEMod(0)
+  elseif cmd == 'Toggle'
+    call ATEMod(2)
+  endif
+  return ''
+endfunction
+" 神様有難う御座います
