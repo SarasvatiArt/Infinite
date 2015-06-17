@@ -1,38 +1,13 @@
-<item>
-      <name>Two cursors to diagonal</name>
-      <appendix>Simultaneous arrow keys presses to Home/End/PageUp/PageDown</appendix>
-      <appendix>(Up+Left to Home)</appendix>
-      <appendix>(Up+Right to PageUp)</appendix>
-      <appendix>(Down+Left to End)</appendix>
-      <appendix>(Down+Right to PageDown)</appendix>
-      <identifier>remap.simcursor_to_diagonal_cursor</identifier>
-      <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_UP, KeyCode::CURSOR_LEFT, KeyCode::HOME</autogen>
-      <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_UP, KeyCode::CURSOR_RIGHT, KeyCode::PAGEUP</autogen>
-      <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_DOWN, KeyCode::CURSOR_LEFT, KeyCode::END</autogen>
-      <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_DOWN, KeyCode::CURSOR_RIGHT, KeyCode::PAGEDOWN</autogen>
-    </item>
-
-
-    <item>
-      <name>CursorKeys to Click and Home</name>
+   <item>
+      <name>CursorKeys to Click and Toggle Mouse Mode</name>
       <appendix>[Left+Up to Left-Click]</appendix>
       <appendix>[Left+Down to Mid-Click]</appendix>
       <appendix>[Down+Right to Right-Click]</appendix>
-      <appendix>[Top+Right to Home]</appendix>
-      <identifier>remap.simcursor_to_diagonal_cursor</identifier>
+	 <appendix>[Top+Right to Toggle Mouse Mode]</appendix>
+      <identifier>CursorKeys_to_Click_and_mModeChange</identifier>
       <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_UP, KeyCode::CURSOR_LEFT, PointingButton::LEFT</autogen>
       <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_DOWN, KeyCode::CURSOR_LEFT, PointingButton::MIDDLE</autogen>
       <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_DOWN, KeyCode::CURSOR_RIGHT, PointingButton::RIGHT</autogen>
-      <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_UP, KeyCode::CURSOR_RIGHT, KeyCode::HOME</autogen>
-    </item>
-
-     <!-- click ((Sample)) -->
-      <autogen>__KeyToKey__ KeyCode::G, PointingButton::LEFT</autogen>
-      <autogen>__KeyToKey__ KeyCode::O, PointingButton::MIDDLE</autogen>
-      <autogen>__KeyToKey__ KeyCode::I, PointingButton::RIGHT</autogen>
-     <item><name>────────ThankGod─────────</name></item>
-
-
-
-
+      <autogen>__SimultaneousKeyPresses__ KeyCode::CURSOR_UP, KeyCode::CURSOR_RIGHT, KeyCode::VK_CONFIG_TOGGLE_notsave_mousekeys_mode</autogen>
+   </item>
 
